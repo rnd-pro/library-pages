@@ -501,12 +501,14 @@ test('CSS Stylesheet - AHP design baseline compliance', () => {
   assert.ok(!headerBlock.includes('filter'), 'Header should not have filter/blur');
   assert.ok(!headerBlock.includes('backdrop-filter'), 'Header should not have backdrop filter');
 
-  // 4. Exact baseline colors
-  assert.ok(styles.includes('--lp-color-bg: #fff;'), 'Base bg color must be #fff');
-  assert.ok(styles.includes('--lp-color-text: #3c3c43;'), 'Base text color must be #3c3c43');
-  assert.ok(styles.includes('--lp-color-primary: #3451b2;'), 'Base primary color must be #3451b2');
-  assert.ok(styles.includes('--lp-color-bg-muted: #f6f6f7;'), 'Base bg muted color must be #f6f6f7');
-  assert.ok(styles.includes('--lp-color-border: #e2e2e3;'), 'Base border color must be #e2e2e3');
+  // 4. Exact unified theme values with lp aliases into the semantic palette
+  assert.ok(styles.includes('--page: #ffffff;'), 'Base page color must be #ffffff');
+  assert.ok(styles.includes('--ink: #3d3d45;'), 'Base ink color must be #3d3d45');
+  assert.ok(styles.includes('--brand: #4058bd;'), 'Base brand color must be #4058bd');
+  assert.ok(styles.includes('--lp-color-bg: var(--page);'), 'lp bg aliases the semantic page token');
+  assert.ok(styles.includes('--lp-color-text: var(--ink);'), 'lp text aliases the semantic ink token');
+  assert.ok(styles.includes('--lp-color-primary: var(--brand);'), 'lp primary aliases the semantic brand token');
+  assert.ok(styles.includes('--lp-color-border: var(--line);'), 'lp border aliases the semantic line token');
 
   // 5. Inter/system font stack
   assert.ok(styles.includes('--lp-font-sans:') && styles.includes('Inter'), 'sans-serif font stack contains Inter');
@@ -753,4 +755,20 @@ test('renderStyles - ships the shared landing patterns and reference motion util
   }
   assert.match(css, /prefers-reduced-motion: no-preference[\s\S]*\.js-active \.lp-anim-dash/);
   assert.match(css, /\.lp-article img \{[^}]*max-width: 100%/);
+});
+
+test('renderStyles - ships the unified default theme with semantic aliases', () => {
+  let css = renderStyles({});
+  assert.match(css, /--brand: #4058bd/);
+  assert.match(css, /--lp-color-primary: var\(--brand\)/);
+  assert.match(css, /--lp-color-bg: var\(--page\)/);
+  assert.match(css, /\[data-theme="dark"\], \.dark \{[^}]*--brand: #8192ff/);
+  assert.match(css, /\.lp-article blockquote/);
+  assert.match(css, /\.lp-article table/);
+});
+
+test('renderStyles - bridges article code blocks into the semantic syntax palette', () => {
+  let css = renderStyles({});
+  assert.match(css, /\.lp-article code-block \{[^}]*--sn-syntax-keyword: var\(--brand\)/);
+  assert.match(css, /\.lp-article code-block \{[^}]*--sn-sys-surface: var\(--surface-code\)/);
 });

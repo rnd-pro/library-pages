@@ -24,6 +24,7 @@ test('Package hygiene - dry run content validation', () => {
     'CHANGELOG.md',
     'LICENSE',
     'README.md',
+    'client/code-blocks.js',
     'client/index.js',
     'client/search.js',
     'client/shell.js',

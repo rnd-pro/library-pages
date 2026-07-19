@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.5] - 2026-07-19
+
+### Added
+
+- The baseline stylesheet now ships the unified default theme: the shared semantic palette (`--page`, `--surface*`, `--ink`, `--muted`, `--line*`, `--brand*`, status and font tokens) with light/dark values, and all `--lp-color-*` tokens alias into it, so consumers need no local token blocks and can restyle later through overrides.
+- Article blockquote and table styles join `.lp-article`, replacing per-consumer prose CSS.
+- `enhanceDocsCodeBlocks(options)` in the client entry upgrades article code fences into the documented Symbiote UI code-block component (language from `data-language` or `language-*` classes, copyable, fallback-safe); the host imports the component before calling.
+
 ## [0.1.0-alpha.4] - 2026-07-19
 
 ### Added

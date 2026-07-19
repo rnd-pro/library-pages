@@ -68,6 +68,10 @@ const siteConfig = defineSiteConfig({
 });
 ```
 
+### Unified Default Theme and Code Highlighting
+
+The baseline stylesheet carries the unified stack theme: a semantic palette (`--page`, `--surface`/`--surface-soft`/`--surface-code`, `--ink`, `--muted`, `--line`/`--line-strong`, `--brand`/`--brand-strong`/`--brand-soft`, status colors, `--sans`/`--mono`) defined for light and dark, with every `--lp-color-*` token aliased into it. Consumers ship no token CSS; page styles and SVG scenes reference the semantic tokens directly, and later per-library styling goes through `tokenOverrides` or scoped page styles. For code highlighting, import your code-block component and call `enhanceDocsCodeBlocks()` from the client entry: article code fences upgrade in place with language detection (`data-language` or `language-*`), copy support, and the semantic `pre`/`code` fallback when the component is unavailable.
+
 ### Landing Patterns and Motion Utilities
 
 The baseline stylesheet ships reference-derived landing patterns so consumer landings compose shared classes instead of redefining typography and controls: `.lp-hero` with `.lp-hero-accent`/`.lp-hero-title`/`.lp-hero-lead`/`.lp-hero-actions`, pill buttons `.lp-cta lp-cta-primary|lp-cta-secondary`, the `.lp-eyebrow` chip, centered `.lp-section-intro` with `.lp-section-title`/`.lp-section-lead`, and alternating `.lp-story-row` narrative rows (`.reverse`, `.lp-story-text/-num/-title/-desc/-visual`). Illustration motion uses `.lp-anim-dash`/`.lp-anim-float`/`.lp-anim-pulse` (+ `.lp-anim-delay-1/2`): continuous subtle loops that only run when JavaScript is active and the user has no reduced-motion preference; static SVG remains the no-JS baseline.

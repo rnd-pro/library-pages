@@ -44,3 +44,5 @@ export function enhanceLibraryPages(options = {}) {
     document.body.removeAttribute('data-scrolled');
   };
 }
+
+export { enhanceDocsCodeBlocks } from './code-blocks.js';

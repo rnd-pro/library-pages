@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.12] - 2026-07-19
+
+### Added
+
+- Outline URL routing: the scroll-spy mirrors the active section into the URL hash (`history.replaceState`, no history spam), a hash in the URL scrolls to and pins its section on load, and hash navigation (outline clicks, heading anchors) pins its target until the reader scrolls again.
+- Edge-fair section selection: headings too close to the document end can never reach the reading line, so `resolveActiveIndex` (exported for reuse and testing) divides the final scroll stretch into equal segments and activates each remaining heading in turn as the page presses into the bottom edge.
+
 ## [0.1.0-alpha.11] - 2026-07-19
 
 ### Fixed

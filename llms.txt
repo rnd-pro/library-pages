@@ -18,7 +18,7 @@ Core exports (library-pages):
 - Modular layout segment renderers: `renderHead`, `renderHeader`, `renderFooter` (static fallback copyright `© <brand title>`), `renderStyles`, `renderThemeBoot`.
 - Docs navigation aids: desktop right outline (>=1280px), `ensureHeadingAnchors` heading ids + hover anchors, `editBaseUrl`/`editPath` edit links, prefix-based active nav highlighting.
 - Unified default theme in the baseline stylesheet: semantic palette tokens (--page/--surface*/--ink/--muted/--line*/--brand* and status/font tokens, light+dark) that all --lp-color-* tokens alias into.
-- `enhanceDocsOutline()` client export (auto-booted by `enhanceLibraryPages`): scroll-spy for the desktop outline - active link highlight and a sliding rail marker.
+- `enhanceDocsOutline()` client export (auto-booted by `enhanceLibraryPages`): scroll-spy for the desktop outline - active link highlight, a sliding rail marker, URL hash sync while scrolling, hash pinning on load/navigation, and edge-fair selection of tail sections (`resolveActiveIndex` is exported for testing).
 - `enhanceDocsCodeBlocks(options)` client export: upgrades `.lp-article pre > code` fences into a host-imported code-block component with language detection and a safe pre/code fallback.
 - Baseline stylesheet landing patterns (`.lp-hero*`, `.lp-cta*`, `.lp-eyebrow`, `.lp-section-*`, `.lp-story-*`) and reference motion utilities (`.lp-anim-dash/float/pulse`, JS-gated, reduced-motion aware).
 - `renderStackSection(siteConfig)`: optional ecosystem cross-linking band driven by the `stack` config field; rendered by `renderPage` between content and footer.

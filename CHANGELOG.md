@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.4] - 2026-07-19
+
+### Added
+
+- Shared reference-derived landing patterns in the baseline stylesheet: `.lp-hero*` two-tone hero, `.lp-cta*` pill buttons, `.lp-eyebrow` chip, `.lp-section-intro/-title/-lead`, and `.lp-story-*` alternating narrative rows, so consumer landings stop duplicating shell typography and controls.
+- Shared illustration motion utilities (`.lp-anim-dash`, `.lp-anim-float`, `.lp-anim-pulse` with delay helpers): continuous subtle loops matching the reference design language, gated on `.js-active` and `prefers-reduced-motion: no-preference`.
+- Article images are capped at the article width by the baseline stylesheet.
+
 ## [0.1.0-alpha.3] - 2026-07-19
 
 ### Added

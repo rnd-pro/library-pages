@@ -68,6 +68,10 @@ const siteConfig = defineSiteConfig({
 });
 ```
 
+### Landing Patterns and Motion Utilities
+
+The baseline stylesheet ships reference-derived landing patterns so consumer landings compose shared classes instead of redefining typography and controls: `.lp-hero` with `.lp-hero-accent`/`.lp-hero-title`/`.lp-hero-lead`/`.lp-hero-actions`, pill buttons `.lp-cta lp-cta-primary|lp-cta-secondary`, the `.lp-eyebrow` chip, centered `.lp-section-intro` with `.lp-section-title`/`.lp-section-lead`, and alternating `.lp-story-row` narrative rows (`.reverse`, `.lp-story-text/-num/-title/-desc/-visual`). Illustration motion uses `.lp-anim-dash`/`.lp-anim-float`/`.lp-anim-pulse` (+ `.lp-anim-delay-1/2`): continuous subtle loops that only run when JavaScript is active and the user has no reduced-motion preference; static SVG remains the no-JS baseline.
+
 ### Optional Stack Section (`stack`)
 
 An optional ecosystem cross-linking band rendered by `renderPage` between the page content and the footer. Declare it only on the page families that should carry it (typically the landing):

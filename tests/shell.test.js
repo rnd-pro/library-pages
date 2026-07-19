@@ -745,3 +745,12 @@ test('renderPage - renders the stack section only when configured', () => {
   assert.ok(stackIndex > html.indexOf('class="lp-page-container"'));
   assert.ok(stackIndex < html.indexOf('class="lp-footer"'));
 });
+
+test('renderStyles - ships the shared landing patterns and reference motion utilities', () => {
+  let css = renderStyles({});
+  for (let cls of ['.lp-hero-title', '.lp-hero-accent', '.lp-cta-primary', '.lp-eyebrow', '.lp-section-title', '.lp-story-row', '.lp-anim-dash', '.lp-anim-pulse']) {
+    assert.ok(css.includes(cls), `baseline styles must ship ${cls}`);
+  }
+  assert.match(css, /prefers-reduced-motion: no-preference[\s\S]*\.js-active \.lp-anim-dash/);
+  assert.match(css, /\.lp-article img \{[^}]*max-width: 100%/);
+});

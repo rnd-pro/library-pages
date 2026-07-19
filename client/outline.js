@@ -106,6 +106,8 @@ export function enhanceDocsOutline() {
   let activeLink = null;
   let pinned = false;
   let pinnedAt = 0;
+  let routingArmed = false;
+  let initAt = Date.now();
   let currentHash = () => (window.location && window.location.hash) || '';
 
   let setActive = link => {
@@ -139,7 +141,7 @@ export function enhanceDocsOutline() {
     history.replaceState(history.state, '', url);
   };
 
-  let update = () => {
+  let update = routeUrl => {
     let tops = headings.map(heading => heading.getBoundingClientRect().top + window.scrollY);
     let maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     let index = resolveActiveIndex({
@@ -150,7 +152,9 @@ export function enhanceDocsOutline() {
     });
     let link = index === -1 ? null : linksById.get(headings[index].id) || null;
     setActive(link);
-    syncHash(link);
+    if (routeUrl === true) {
+      syncHash(link);
+    }
   };
 
   let pinTo = id => {
@@ -169,7 +173,7 @@ export function enhanceDocsOutline() {
       return;
     }
     pinned = false;
-    update();
+    update(true);
   };
 
   let onScroll = () => {
@@ -178,11 +182,18 @@ export function enhanceDocsOutline() {
         return;
       }
       pinned = false;
+    } else if (!routingArmed && Date.now() - initAt < PIN_SETTLE_MS) {
+      update(false);
+      return;
     }
-    update();
+    routingArmed = true;
+    update(true);
   };
 
-  let onInput = () => releasePin();
+  let onInput = () => {
+    routingArmed = true;
+    releasePin();
+  };
 
   let onHashChange = () => {
     let id = decodeURIComponent(currentHash().slice(1));
@@ -202,15 +213,21 @@ export function enhanceDocsOutline() {
   for (let link of links) {
     link.addEventListener('click', onLinkClick);
   }
+  let onResize = () => {
+    if (!pinned) {
+      update(false);
+    }
+  };
+
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll, { passive: true });
+  window.addEventListener('resize', onResize, { passive: true });
   window.addEventListener('wheel', onInput, { passive: true });
   window.addEventListener('touchmove', onInput, { passive: true });
   window.addEventListener('hashchange', onHashChange);
 
   let initialId = decodeURIComponent(currentHash().slice(1));
   if (!initialId || !pinTo(initialId)) {
-    update();
+    update(false);
   }
 
   return () => {
@@ -218,7 +235,7 @@ export function enhanceDocsOutline() {
       link.removeEventListener('click', onLinkClick);
     }
     window.removeEventListener('scroll', onScroll);
-    window.removeEventListener('resize', onScroll);
+    window.removeEventListener('resize', onResize);
     window.removeEventListener('wheel', onInput);
     window.removeEventListener('touchmove', onInput);
     window.removeEventListener('hashchange', onHashChange);

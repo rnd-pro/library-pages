@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.13] - 2026-07-19
+
+### Fixed
+
+- The outline spy never rewrites a hash it does not own: URL routing arms only after reader-driven input (wheel, touch, or scrolling past the settle window), so foreign anchors and deep links survive page load intact.
+
 ## [0.1.0-alpha.12] - 2026-07-19
 
 ### Added

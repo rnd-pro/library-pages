@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.3] - 2026-07-19
+
+### Added
+
+- Optional `stack` config section and `renderStackSection` export: an ecosystem cross-linking band rendered by `renderPage` between content and footer, with base-path-safe links, HTML escaping, and an `aria-current` card for the current library.
+
 ## [0.1.0-alpha.2] - 2026-07-19
 
 ### Fixed

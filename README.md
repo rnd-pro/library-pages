@@ -68,6 +68,23 @@ const siteConfig = defineSiteConfig({
 });
 ```
 
+### Optional Stack Section (`stack`)
+
+An optional ecosystem cross-linking band rendered by `renderPage` between the page content and the footer. Declare it only on the page families that should carry it (typically the landing):
+
+```js
+stack: {
+  title: 'Part of the Symbiote stack',
+  tagline: 'One config-driven stack, three libraries.',
+  items: [
+    { label: 'symbiote-workspace', description: 'The flagship track.', path: 'https://example.dev/workspace/' },
+    { label: 'my-library', description: 'You are here.', current: true }
+  ]
+}
+```
+
+Each item needs `label` and `description`; items link through the same base-path URL helpers as navigation unless marked `current: true`, which renders a non-linked card flagged with `aria-current`. `renderStackSection(siteConfig)` is exported for custom compositions.
+
 ### 2. Document Head Fields (`metadata.icon` and `pageStyles`)
 One composed `SiteConfig` represents one page family: every page rendered from it shares the same document head.
 

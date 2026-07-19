@@ -183,6 +183,28 @@ export function defineSiteConfig(config) {
       throw new Error('searchPlaceholder must be a non-empty string.');
     }
   }
+  if (config.stack !== undefined) {
+    if (typeof config.stack !== 'object' || config.stack === null || Array.isArray(config.stack)) {
+      throw new Error('stack must be an object with "title" and "items".');
+    }
+    if (typeof config.stack.title !== 'string' || !config.stack.title.trim()) {
+      throw new Error('Stack title must be a non-empty string.');
+    }
+    if (config.stack.tagline !== undefined && (typeof config.stack.tagline !== 'string' || !config.stack.tagline.trim())) {
+      throw new Error('Stack tagline must be a non-empty string.');
+    }
+    if (!Array.isArray(config.stack.items) || config.stack.items.length === 0) {
+      throw new Error('Stack items must be a non-empty array.');
+    }
+    config.stack.items.forEach((item, index) => {
+      if (typeof item !== 'object' || item === null || typeof item.label !== 'string' || !item.label.trim() || typeof item.description !== 'string' || !item.description.trim()) {
+        throw new Error(`Stack item at index ${index} must have "label" (string) and "description" (string).`);
+      }
+      if (item.current !== true && (typeof item.path !== 'string' || !item.path.trim())) {
+        throw new Error(`Stack item at index ${index} must have a "path" unless it is marked "current".`);
+      }
+    });
+  }
   if (config.symbioteTokenBridge !== undefined) {
     if (typeof config.symbioteTokenBridge !== 'boolean') {
       throw new Error('symbioteTokenBridge must be a boolean.');

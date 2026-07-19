@@ -692,3 +692,56 @@ test('renderHead - defensively rejects invalid pageStyles at render time', () =>
   };
   assert.throws(() => renderHead(nullStyles), /pageStyles must be a string/);
 });
+
+test('defineSiteConfig - validates the optional stack section', () => {
+  let base = {
+    brand: { title: 'Test Library' },
+    stack: {
+      title: 'Part of the Symbiote stack',
+      items: [
+        { label: 'symbiote-workspace', description: 'Flagship track.', path: 'https://example.test/workspace/' },
+        { label: 'This library', description: 'You are here.', current: true },
+      ],
+    },
+  };
+  let processed = defineSiteConfig(base);
+  assert.equal(processed.stack.items.length, 2);
+  assert.ok(Object.isFrozen(processed.stack));
+
+  assert.throws(() => defineSiteConfig({ brand: { title: 'x' }, stack: [] }), /stack must be an object/);
+  assert.throws(() => defineSiteConfig({ brand: { title: 'x' }, stack: { title: ' ', items: [{ label: 'a', description: 'b', path: '/' }] } }), /Stack title/);
+  assert.throws(() => defineSiteConfig({ brand: { title: 'x' }, stack: { title: 'T', items: [] } }), /non-empty array/);
+  assert.throws(() => defineSiteConfig({ brand: { title: 'x' }, stack: { title: 'T', items: [{ label: 'a', description: 'b' }] } }), /must have a "path" unless it is marked "current"/);
+  assert.throws(() => defineSiteConfig({ brand: { title: 'x' }, stack: { title: 'T', items: [{ label: ' ', description: 'b', path: '/' }] } }), /"label" \(string\) and "description"/);
+});
+
+test('renderPage - renders the stack section only when configured', () => {
+  let withoutStack = defineSiteConfig({ brand: { title: 'Solo' }, basePath: '/lib/' });
+  let plain = renderPage({ siteConfig: withoutStack, contentHtml: '<p>x</p>', currentPath: '/' });
+  assert.ok(!plain.includes('class="lp-stack"'));
+
+  let withStack = defineSiteConfig({
+    brand: { title: 'Solo' },
+    basePath: '/lib/',
+    stack: {
+      title: 'Part of the <Symbiote> stack',
+      tagline: 'One stack, three libraries.',
+      items: [
+        { label: 'symbiote-workspace', description: 'Flagship & primary track.', path: 'https://example.test/workspace/' },
+        { label: 'Docs home', description: 'Local link.', path: '/docs/' },
+        { label: 'Solo', description: 'You are here.', current: true },
+      ],
+    },
+  });
+  let html = renderPage({ siteConfig: withStack, contentHtml: '<p>x</p>', currentPath: '/' });
+  assert.ok(html.includes('class="lp-stack"'));
+  assert.ok(html.includes('aria-label="Part of the &lt;Symbiote&gt; stack"'));
+  assert.ok(html.includes('One stack, three libraries.'));
+  assert.ok(html.includes('Flagship &amp; primary track.'));
+  assert.ok(html.includes('href="https://example.test/workspace/"'));
+  assert.ok(html.includes('href="/lib/docs/"'));
+  assert.ok(html.includes('aria-current="true"'));
+  let stackIndex = html.indexOf('class="lp-stack"');
+  assert.ok(stackIndex > html.indexOf('class="lp-page-container"'));
+  assert.ok(stackIndex < html.indexOf('class="lp-footer"'));
+});

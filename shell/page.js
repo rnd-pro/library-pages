@@ -138,6 +138,41 @@ export function renderHeader(siteConfig, currentPath = '') {
 `;
 }
 
+export function renderStackSection(siteConfig) {
+  let stack = siteConfig.stack;
+  if (!stack) {
+    return '';
+  }
+  let { resolvePath } = createUrlHelpers({ basePath: siteConfig.basePath });
+  let cards = stack.items.map(item => {
+    let inner = `<span class="lp-stack-label">${escapeHtml(item.label)}</span>
+        <span class="lp-stack-desc">${escapeHtml(item.description)}</span>`;
+    if (item.current === true) {
+      return `<div class="lp-stack-card" aria-current="true">
+        ${inner}
+      </div>`;
+    }
+    return `<a class="lp-stack-card" href="${escapeHtml(resolvePath(item.path))}">
+        ${inner}
+      </a>`;
+  }).join('\n      ');
+
+  let taglineHtml = stack.tagline
+    ? `<p class="lp-stack-tagline">${escapeHtml(stack.tagline)}</p>`
+    : '';
+
+  return `
+  <section class="lp-stack" aria-label="${escapeHtml(stack.title)}">
+    <div class="lp-stack-inner">
+      <h2 class="lp-stack-title">${escapeHtml(stack.title)}</h2>
+      ${taglineHtml}
+      <div class="lp-stack-grid">
+      ${cards}
+      </div>
+    </div>
+  </section>`;
+}
+
 export function renderFooter(siteConfig) {
   let linksHtml = '';
   if (siteConfig.footer && siteConfig.footer.links && siteConfig.footer.links.length > 0) {
@@ -196,6 +231,7 @@ ${renderHead(siteConfig, pageTitle, currentPath)}
     <div class="lp-page-container">
       ${contentHtml}
     </div>
+    ${renderStackSection(siteConfig)}
   </main>
   ${renderFooter(siteConfig)}
   ${searchDialogHtml}

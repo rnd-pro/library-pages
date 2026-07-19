@@ -99,10 +99,13 @@ export function renderTOC(toc, currentRoute, siteConfig) {
 
   return `
   <aside class="lp-toc">
-    <div class="lp-toc-title">On This Page</div>
-    <ul class="lp-toc-list">
+    <nav class="lp-toc-outline" aria-label="On this page">
+      <div class="lp-toc-marker" aria-hidden="true"></div>
+      <div class="lp-toc-title">On this page</div>
+      <ul class="lp-toc-list">
       ${items}
-    </ul>
+      </ul>
+    </nav>
   </aside>
 `;
 }

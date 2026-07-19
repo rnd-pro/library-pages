@@ -1,5 +1,6 @@
 import { enhanceShell } from './shell.js';
 import { enhanceSearch } from './search.js';
+import { enhanceDocsOutline } from './outline.js';
 
 export function enhanceLibraryPages(options = {}) {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
@@ -11,6 +12,7 @@ export function enhanceLibraryPages(options = {}) {
   document.documentElement.classList.add('js-active');
 
   let cleanupShell = enhanceShell(options) || (() => {});
+  let cleanupOutline = enhanceDocsOutline() || (() => {});
 
   let dialogEl = null;
   if (options.dialog) {
@@ -37,6 +39,9 @@ export function enhanceLibraryPages(options = {}) {
     if (typeof cleanupShell === 'function') {
       cleanupShell();
     }
+    if (typeof cleanupOutline === 'function') {
+      cleanupOutline();
+    }
     if (typeof cleanupSearch === 'function') {
       cleanupSearch();
     }
@@ -46,3 +51,4 @@ export function enhanceLibraryPages(options = {}) {
 }
 
 export { enhanceDocsCodeBlocks } from './code-blocks.js';
+export { enhanceDocsOutline };

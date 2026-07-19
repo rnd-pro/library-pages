@@ -70,7 +70,7 @@ const siteConfig = defineSiteConfig({
 
 ### Docs Navigation Aids
 
-Docs pages carry the reference navigation aids out of the box: at >=1280px the right "On this page" outline column replaces the mobile disclosure; `renderDocsPage` runs `ensureHeadingAnchors` over the article (stable slugified ids for h2/h3 plus hover `#` anchor links; existing ids are preserved), which also feeds the outline for markdown that ships no ids; declaring `editBaseUrl` in the site config together with a per-route `editPath` renders an "Edit this page on GitHub" link above the pager; and the header highlights the owning nav section by path prefix.
+Docs pages carry the reference navigation aids out of the box: at >=1280px the right "On this page" outline column replaces the mobile disclosure, rendered as a rail with a sliding marker whose active section is tracked by the `enhanceDocsOutline` scroll-spy (booted automatically by `enhanceLibraryPages`; the static outline works without JS); `renderDocsPage` runs `ensureHeadingAnchors` over the article (stable slugified ids for h2/h3 plus hover `#` anchor links; existing ids are preserved), which also feeds the outline for markdown that ships no ids; anchor jumps clear the sticky header via `scroll-padding-top`; declaring `editBaseUrl` in the site config together with a per-route `editPath` renders an "Edit this page on GitHub" link above the pager; and the header highlights the owning nav section by path prefix.
 
 ### Unified Default Theme and Code Highlighting
 

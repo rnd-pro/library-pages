@@ -355,6 +355,9 @@ test('renderTOC - returns formatted list HTML', () => {
   ];
   let html = renderTOC(toc);
   assert.ok(html.includes('<aside class="lp-toc">'));
+  assert.ok(html.includes('<nav class="lp-toc-outline" aria-label="On this page">'));
+  assert.ok(html.includes('<div class="lp-toc-marker" aria-hidden="true"></div>'));
+  assert.ok(html.includes('<div class="lp-toc-title">On this page</div>'));
   assert.ok(html.includes('href="/#h1"'));
   assert.ok(html.includes('class="lp-toc-item depth-2"'));
   assert.ok(html.includes('class="lp-toc-item depth-3"'));
@@ -845,4 +848,15 @@ test('renderStyles - ships desktop outline, anchor, and edit-link styles', () =>
   assert.match(css, /@media \(min-width: 1280px\) \{[\s\S]*?\.lp-toc \{[\s\S]*?display: block/);
   assert.match(css, /\.lp-anchor \{/);
   assert.match(css, /\.lp-edit-link \{/);
+  assert.match(css, /\.lp-toc-outline \{[^}]*border-left: 1px solid var\(--lp-color-border\)/, 'Outline rail divider');
+  assert.match(css, /\.lp-toc-marker \{[^}]*transition: top 0\.25s cubic-bezier\(0, 1, 0\.5, 1\)/, 'Marker slides with the reference easing');
+  assert.match(css, /\.lp-toc-marker\.is-visible \{[^}]*display: block/, 'Marker appears only when the spy activates it');
+  assert.match(css, /\.lp-toc-link \{[^}]*line-height: 2rem/, 'Outline links use the 32px reference rhythm');
+  assert.match(css, /html \{[^}]*scroll-padding-top: calc\(var\(--lp-header-height\) \+ 24px\)/, 'Anchor jumps clear the sticky header');
+});
+
+test('renderStyles - ships the shared card grid pattern', () => {
+  let css = renderStyles({});
+  assert.match(css, /\.lp-card-grid \{[^}]*repeat\(auto-fill, minmax\(280px, 1fr\)\)/);
+  assert.match(css, /a\.lp-card:hover \{[^}]*border-color: var\(--lp-color-primary\)/);
 });

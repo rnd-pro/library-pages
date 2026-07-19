@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.9] - 2026-07-19
+
+### Added
+
+- Reference-parity "On this page" outline: the desktop column now renders a rail with a sliding 2px marker, a sentence-case title, and 32px-rhythm links; the new `enhanceDocsOutline` client export (booted automatically by `enhanceLibraryPages`) tracks the reading position and highlights the active section. The static outline stays fully usable without JS.
+- `html { scroll-padding-top }` so anchor jumps clear the sticky header.
+- Shared `.lp-card-grid`/`.lp-card` link-card pattern for index pages such as demo listings.
+
 ## [0.1.0-alpha.8] - 2026-07-19
 
 ### Added

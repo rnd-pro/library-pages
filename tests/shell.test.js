@@ -814,6 +814,15 @@ test('renderDocsPage - renders desktop TOC data, edit link, and anchored heading
   });
   assert.match(html, /class="lp-anchor" href="#alpha-beta"/);
   assert.match(html, /lp-toc-link">Alpha Beta</, 'TOC text carries no anchor suffix');
+
+  let entityHtml = renderDocsPage({
+    siteConfig: cfg,
+    routes,
+    currentRoute: routes[0],
+    contentHtml: '<h2>Inputs &amp; Contracts</h2><p>x</p>',
+  });
+  assert.match(entityHtml, /lp-toc-link">Inputs &amp; Contracts</, 'TOC text escapes entities exactly once');
+  assert.ok(!entityHtml.includes('&amp;amp;'), 'No double-escaped entities in the outline');
   assert.match(html, /class="lp-edit-link" href="https:\/\/github\.com\/o\/r\/edit\/main\/docs\/one\.md"/);
   assert.match(html, /Edit this page on GitHub/);
 

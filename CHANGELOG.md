@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.11] - 2026-07-19
+
+### Fixed
+
+- Outline and mobile TOC text no longer double-escapes HTML entities (`&` rendered as `&amp;`): `extractTOC` decodes the heading's escaped entities before the renderer escapes them once.
+
 ## [0.1.0-alpha.10] - 2026-07-19
 
 ### Fixed

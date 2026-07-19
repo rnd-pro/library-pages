@@ -77,6 +77,11 @@ export function extractTOC(contentHtml) {
     let text = match[3]
       .replace(/<a class="lp-anchor"[\s\S]*?<\/a>/g, '')
       .replace(/<\/?[^>]+(>|$)/g, '')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&')
       .trim();
     toc.push({ id, text, depth });
   }

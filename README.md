@@ -1,4 +1,4 @@
-# @rnd-pro/library-pages
+# library-pages
 
 Reusable, semantic, and progressively enhanced static documentation shell for RND-PRO libraries, providing base-path-safe layouts, search indexing, client-side progressive enhancement, and output verification with zero runtime dependencies.
 
@@ -7,7 +7,7 @@ Reusable, semantic, and progressively enhanced static documentation shell for RN
 Install the package as a development dependency:
 
 ```bash
-npm install --save-dev @rnd-pro/library-pages
+npm install --save-dev library-pages
 ```
 
 ### Environment Requirements
@@ -17,14 +17,14 @@ npm install --save-dev @rnd-pro/library-pages
 ### Zero-Runtime-Dependency Boundary
 This package operates with a strict zero-runtime-dependency boundary. All templates, CSS baselines, configurations, and URL resolution helpers are packaged and resolved during static site generation (SSG).
 - **DOM-Free Core**: The main exports are Node-safe and DOM-free, ensuring they can be imported and executed inside server-side scripts or SSG builders without referencing browser globals like `window` or `document`.
-- **Client Separation**: Client-side interactive script enhancements are isolated inside the `@rnd-pro/library-pages/client` subpath to prevent Node environments from throwing errors.
+- **Client Separation**: Client-side interactive script enhancements are isolated inside the `library-pages/client` subpath to prevent Node environments from throwing errors.
 
 ---
 
 ## Architectural Distinctions
 
 ### Shared Shell Mechanics vs. Consumer-Owned Semantics
-- **Shared Shell Mechanics (Owned by `@rnd-pro/library-pages`)**: Governs the structured layouts, accessibility skip links, unified headers/footers, dark/light theme management state, search index serialization, and dialog overlay triggers.
+- **Shared Shell Mechanics (Owned by `library-pages`)**: Governs the structured layouts, accessibility skip links, unified headers/footers, dark/light theme management state, search index serialization, and dialog overlay triggers.
 - **Consumer-Owned Semantics (Owned by the library repository)**: The consumer retains exclusive ownership of all text, diagrams, animations, and demo semantics. The actual page markdown/HTML content, custom branding assets, custom styling overrides, and specific interactive widgets remain completely owned and managed by the consumer.
 
 ### Native JSDA 1.6 Integration
@@ -38,7 +38,7 @@ The `jsda-kit` (version 1.6) is consumed completely unchanged in its native form
 Validates and freezes the trusted build-time configurations, setting safe defaults.
 
 ```js
-import { defineSiteConfig } from '@rnd-pro/library-pages';
+import { defineSiteConfig } from 'library-pages';
 
 const siteConfig = defineSiteConfig({
   brand: {
@@ -78,7 +78,7 @@ One composed `SiteConfig` represents one page family: every page rendered from i
 Validates and freezes documentation paths, normalizing them, applying optional default fallback sections, and guarding against duplicate routes.
 
 ```js
-import { defineDocsRoutes } from '@rnd-pro/library-pages';
+import { defineDocsRoutes } from 'library-pages';
 
 const routes = defineDocsRoutes([
   { path: 'intro', title: 'Introduction' }, // Falls back to defaultSection
@@ -129,7 +129,7 @@ When `navigation` entries are configured, `renderHeader` renders the desktop lin
 To add client-side interactivity, import and call `enhanceLibraryPages` in your browser bundle entry:
 
 ```js
-import { enhanceLibraryPages } from '@rnd-pro/library-pages/client';
+import { enhanceLibraryPages } from 'library-pages/client';
 
 const cleanup = enhanceLibraryPages({
   dialog: '[data-search-dialog]',          // Optional: Selector string or dialog DOM element
@@ -161,7 +161,7 @@ const cleanup = enhanceLibraryPages({
 
 ## Export Directory
 
-### Core SSG & Configuration Utility Exports (`@rnd-pro/library-pages`)
+### Core SSG & Configuration Utility Exports (`library-pages`)
 - `defineSiteConfig(config)`: Validates and deep freezes site configuration options, setting default fallback keys.
 - `defineDocsRoutes(routes, options)`: Normalizes paths, group-sections, and freezes page routes. Throws on duplicates.
 - `normalizeRoutes(routes)`: Internal helper validating route path uniqueness and enforcing normalized slash structures.
@@ -185,5 +185,5 @@ const cleanup = enhanceLibraryPages({
 - `createArtifactChecks({ parseHTML })`: Instantiates DOM verification rules checking canonical URL format, base-path prefixes, forbidden selector patterns (`.cb-`, `#cb-`), link health, and responsive reduced-motion rules.
 - `assertPagesOutput({ outputDir, basePath, baseUrl, requiredFiles, parseHTML })`: Evaluates a compiled static folder against sanity rules, guaranteeing GitHub Pages path containment.
 
-### Client-Side Enhancement Exports (`@rnd-pro/library-pages/client`)
+### Client-Side Enhancement Exports (`library-pages/client`)
 - `enhanceLibraryPages(options)`: Boots progressive enhancements. Returns cleanups restoring standard HTML baselines.

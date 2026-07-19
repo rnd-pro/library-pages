@@ -1,4 +1,4 @@
-// Main entrypoint for @rnd-pro/library-pages.
+// Main entrypoint for library-pages.
 // Exposes only Node-safe, DOM-free SSG / configuration utilities.
 // Client-side / browser enhancements must be imported from the './client' subpath.
 

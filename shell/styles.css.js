@@ -39,9 +39,6 @@ export default /*css*/ `
   --amber-soft: #fef5e6;
   --danger: #b82d3e;
   --focus: var(--brand);
-  /* Concrete stacks: aliasing lp-font here would loop through the
-     data-lp-symbiote bridge (--lp-font -> --sn-font -> --sans) and
-     invalidate font-family on bridge-enabled consumers. */
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
 

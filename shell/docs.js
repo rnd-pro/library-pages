@@ -74,7 +74,10 @@ export function extractTOC(contentHtml) {
   while ((match = regex.exec(contentHtml)) !== null) {
     let depth = parseInt(match[1], 10);
     let id = match[2];
-    let text = match[3].replace(/<\/?[^>]+(>|$)/g, '').trim();
+    let text = match[3]
+      .replace(/<a class="lp-anchor"[\s\S]*?<\/a>/g, '')
+      .replace(/<\/?[^>]+(>|$)/g, '')
+      .trim();
     toc.push({ id, text, depth });
   }
   return toc;

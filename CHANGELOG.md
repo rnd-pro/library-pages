@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.10] - 2026-07-19
+
+### Fixed
+
+- Outline and mobile TOC link text no longer carries the trailing `#` from the injected heading anchor (`extractTOC` strips anchor markup before text extraction).
+
 ## [0.1.0-alpha.9] - 2026-07-19
 
 ### Added

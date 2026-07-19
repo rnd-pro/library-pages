@@ -813,7 +813,7 @@ test('renderDocsPage - renders desktop TOC data, edit link, and anchored heading
     contentHtml: '<h2>Alpha Beta</h2><p>x</p>',
   });
   assert.match(html, /class="lp-anchor" href="#alpha-beta"/);
-  assert.match(html, /lp-toc-link">Alpha Beta/);
+  assert.match(html, /lp-toc-link">Alpha Beta</, 'TOC text carries no anchor suffix');
   assert.match(html, /class="lp-edit-link" href="https:\/\/github\.com\/o\/r\/edit\/main\/docs\/one\.md"/);
   assert.match(html, /Edit this page on GitHub/);
 

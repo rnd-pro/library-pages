@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.2] - 2026-07-19
+
+### Fixed
+
+- The header brand no longer overlaps the search trigger at narrow widths: below 901px the brand shrinks with ellipsis instead of keeping its sidebar-aligned fixed width, and the search/theme controls keep their size.
+
 ## [0.1.0-alpha.1] - 2026-07-18
 
 ### Added

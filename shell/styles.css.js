@@ -876,6 +876,18 @@ body {
   .lp-brand {
     width: auto;
     max-width: 100%;
+    flex-shrink: 1;
+    overflow: hidden;
+    margin-right: var(--lp-space-sm);
+  }
+
+  .lp-btn[data-search-trigger] {
+    margin-left: var(--lp-space-sm);
+    flex-shrink: 0;
+  }
+
+  .lp-btn-icon[data-theme-toggle] {
+    flex-shrink: 0;
   }
 
   .lp-docs-layout {

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.8] - 2026-07-19
+
+### Added
+
+- Desktop "On this page" outline: the right TOC column renders at viewports >= 1280px (the mobile disclosure hides there), matching the reference docs layout.
+- Heading anchors: `renderDocsPage` post-processes article content through the new `ensureHeadingAnchors` export - every h2/h3 gets a stable slugified id (existing ids preserved, duplicates deduplicated) and a hover `#` anchor link. This also restores the outline for markdown pipelines that emit no heading ids.
+- "Edit this page on GitHub": new `editBaseUrl` site config field plus per-route `editPath` render an edit link above the pager.
+- Header navigation now highlights the owning section by path prefix (external links never activate).
+
 ## [0.1.0-alpha.7] - 2026-07-19
 
 ### Fixed

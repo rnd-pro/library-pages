@@ -95,7 +95,10 @@ export function renderHeader(siteConfig, currentPath = '') {
   if (siteConfig.navigation && siteConfig.navigation.length > 0) {
     let links = siteConfig.navigation.map(item => {
       let resolvedPath = resolvePath(item.path);
-      let isActive = normalizePath(currentPath) === normalizePath(item.path);
+      let itemPath = normalizePath(item.path);
+      let normalizedCurrent = normalizePath(currentPath);
+      let isActive = normalizedCurrent === itemPath
+        || (itemPath !== '/' && !/^[a-z][a-z0-9+.-]*:/i.test(item.path) && normalizedCurrent.startsWith(itemPath));
       let activeClass = isActive ? ' active' : '';
       let ariaCurrent = isActive ? ' aria-current="page"' : '';
       return `<a href="${escapeHtml(resolvedPath)}" class="lp-nav-link${activeClass}"${ariaCurrent}>${escapeHtml(item.label)}</a>`;

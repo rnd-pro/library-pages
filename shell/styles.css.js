@@ -473,6 +473,35 @@ body {
   font-weight: 600;
 }
 
+.lp-anchor {
+  margin-left: 6px;
+  color: var(--lp-color-primary);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--lp-transition-fast);
+}
+
+.lp-article :is(h2, h3):hover .lp-anchor,
+.lp-anchor:focus-visible {
+  opacity: 1;
+}
+
+.lp-doc-footer {
+  margin-top: var(--lp-space-xl);
+}
+
+.lp-edit-link {
+  color: var(--lp-color-text-dim);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color var(--lp-transition-fast);
+}
+
+.lp-edit-link:hover {
+  color: var(--lp-color-primary);
+  text-decoration: underline;
+}
+
 .lp-article code-block {
   --sn-font-mono: var(--mono);
   --sn-sys-surface: var(--surface-code);
@@ -1416,6 +1445,21 @@ a.lp-stack-card:hover {
 
 .lp-sidebar-list-unstyled {
   list-style: none;
+}
+
+@media (min-width: 1280px) {
+  .lp-toc {
+    display: block;
+    grid-area: 1 / 3 / span 2;
+  }
+
+  .lp-docs-layout {
+    grid-template-columns: var(--lp-sidebar-width) 1fr var(--lp-toc-width);
+  }
+
+  .lp-mobile-toc {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

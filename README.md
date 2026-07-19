@@ -68,6 +68,10 @@ const siteConfig = defineSiteConfig({
 });
 ```
 
+### Docs Navigation Aids
+
+Docs pages carry the reference navigation aids out of the box: at >=1280px the right "On this page" outline column replaces the mobile disclosure; `renderDocsPage` runs `ensureHeadingAnchors` over the article (stable slugified ids for h2/h3 plus hover `#` anchor links; existing ids are preserved), which also feeds the outline for markdown that ships no ids; declaring `editBaseUrl` in the site config together with a per-route `editPath` renders an "Edit this page on GitHub" link above the pager; and the header highlights the owning nav section by path prefix.
+
 ### Unified Default Theme and Code Highlighting
 
 The baseline stylesheet carries the unified stack theme: a semantic palette (`--page`, `--surface`/`--surface-soft`/`--surface-code`, `--ink`, `--muted`, `--line`/`--line-strong`, `--brand`/`--brand-strong`/`--brand-soft`, status colors, `--sans`/`--mono`) defined for light and dark, with every `--lp-color-*` token aliased into it. Consumers ship no token CSS; page styles and SVG scenes reference the semantic tokens directly, and later per-library styling goes through `tokenOverrides` or scoped page styles. For code highlighting, import your code-block component and call `enhanceDocsCodeBlocks()` from the client entry: article code fences upgrade in place with language detection (`data-language` or `language-*`), copy support, and the semantic `pre`/`code` fallback when the component is unavailable.

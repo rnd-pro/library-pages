@@ -4,6 +4,7 @@ import vm from 'node:vm';
 import {
   defineSiteConfig,
   defineDocsRoutes,
+  ensureHeadingAnchors,
   renderPage,
   renderHead,
   renderHeader,
@@ -780,4 +781,68 @@ test('renderStyles - semantic font tokens stay concrete to avoid the symbiote br
   assert.ok(sans && !sans[1].includes('var(--lp-font'), '--sans must not alias --lp-font-sans');
   assert.ok(mono && !mono[1].includes('var(--lp-font'), '--mono must not alias --lp-font-mono');
   assert.ok(sans[1].includes('Inter'), '--sans carries the shared Inter stack');
+});
+
+test('ensureHeadingAnchors - generates ids, keeps existing ones, adds hover anchors', () => {
+  let html = '<h2>Getting Started</h2><h2 id="kept">Kept</h2><h3>Getting Started</h3><h2>Getting Started</h2>';
+  let out = ensureHeadingAnchors(html);
+  assert.match(out, /<h2 id="getting-started">Getting Started <a class="lp-anchor" href="#getting-started"/);
+  assert.match(out, /<h2 id="kept">Kept <a class="lp-anchor" href="#kept"/);
+  assert.match(out, /id="getting-started-2"/);
+  assert.match(out, /id="getting-started-3"/);
+  assert.equal(ensureHeadingAnchors(out), out, 'idempotent on already-anchored content');
+});
+
+test('renderDocsPage - renders desktop TOC data, edit link, and anchored headings', () => {
+  let cfg = defineSiteConfig({
+    brand: { title: 'T' },
+    basePath: '/lib/',
+    editBaseUrl: 'https://github.com/o/r/edit/main/docs/',
+  });
+  let routes = defineDocsRoutes([
+    { path: '/docs/', title: 'One', section: 'S', editPath: 'one.md' },
+    { path: '/docs/two/', title: 'Two', section: 'S', editPath: 'two.md' },
+  ]);
+  let html = renderDocsPage({
+    siteConfig: cfg,
+    routes,
+    currentRoute: routes[0],
+    contentHtml: '<h2>Alpha Beta</h2><p>x</p>',
+  });
+  assert.match(html, /class="lp-anchor" href="#alpha-beta"/);
+  assert.match(html, /lp-toc-link">Alpha Beta/);
+  assert.match(html, /class="lp-edit-link" href="https:\/\/github\.com\/o\/r\/edit\/main\/docs\/one\.md"/);
+  assert.match(html, /Edit this page on GitHub/);
+
+  let noEdit = renderDocsPage({
+    siteConfig: defineSiteConfig({ brand: { title: 'T' } }),
+    routes,
+    currentRoute: routes[0],
+    contentHtml: '<p>x</p>',
+  });
+  assert.ok(!noEdit.includes('class="lp-edit-link"'));
+});
+
+test('renderHeader - highlights the owning nav section by path prefix', () => {
+  let cfg = defineSiteConfig({
+    brand: { title: 'T' },
+    navigation: [
+      { label: 'Home', path: '/' },
+      { label: 'Guide', path: '/docs/' },
+      { label: 'GitHub', path: 'https://github.com/x' },
+    ],
+  });
+  let deep = renderHeader(cfg, '/docs/guide/');
+  assert.match(deep, /class="lp-nav-link active" aria-current="page">Guide/);
+  assert.ok(!/class="lp-nav-link active"[^>]*>Home/.test(deep), 'Home is not active on docs pages');
+  assert.ok(!/class="lp-nav-link active"[^>]*>GitHub/.test(deep), 'External links never activate');
+  let home = renderHeader(cfg, '/');
+  assert.match(home, /class="lp-nav-link active" aria-current="page">Home/);
+});
+
+test('renderStyles - ships desktop outline, anchor, and edit-link styles', () => {
+  let css = renderStyles({});
+  assert.match(css, /@media \(min-width: 1280px\) \{[\s\S]*?\.lp-toc \{[\s\S]*?display: block/);
+  assert.match(css, /\.lp-anchor \{/);
+  assert.match(css, /\.lp-edit-link \{/);
 });

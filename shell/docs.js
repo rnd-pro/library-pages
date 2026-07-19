@@ -30,6 +30,41 @@ export function renderMobileTOC(toc, currentRoute, siteConfig) {
 `;
 }
 
+/**
+ * Ensures every h2/h3 in trusted build-time content has a stable id and a
+ * hover anchor link. Existing ids are preserved; generated ids are slugified
+ * from the heading text and deduplicated.
+ * @param {string} contentHtml
+ * @returns {string}
+ */
+export function ensureHeadingAnchors(contentHtml) {
+  let seen = new Set();
+  return contentHtml.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi, (full, level, attrs, inner) => {
+    let idMatch = attrs.match(/\sid=(?:"([^"]*)"|'([^']*)')/i);
+    let id = idMatch ? (idMatch[1] || idMatch[2]) : null;
+    if (id) {
+      seen.add(id);
+    } else {
+      let text = inner.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ');
+      let slug = text.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      id = slug || `section`;
+      let unique = id;
+      let counter = 2;
+      while (seen.has(unique)) {
+        unique = `${id}-${counter}`;
+        counter += 1;
+      }
+      id = unique;
+      seen.add(id);
+      attrs = `${attrs} id="${id}"`;
+    }
+    if (inner.includes('lp-anchor')) {
+      return `<h${level}${attrs}>${inner}</h${level}>`;
+    }
+    return `<h${level}${attrs}>${inner} <a class="lp-anchor" href="#${id}" aria-label="Link to this section">#</a></h${level}>`;
+  });
+}
+
 export function extractTOC(contentHtml) {
   if (!contentHtml) return [];
   let headingRegex = /<h([23])\s+[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/gi;
@@ -178,6 +213,8 @@ export function renderDocsPage({ siteConfig, routes, currentRoute, contentHtml, 
     throw new Error('contentHtml is required.');
   }
 
+  contentHtml = ensureHeadingAnchors(contentHtml);
+
   let resolvedToc = toc;
   if (!resolvedToc) {
     resolvedToc = extractTOC(contentHtml);
@@ -194,6 +231,14 @@ export function renderDocsPage({ siteConfig, routes, currentRoute, contentHtml, 
 
   let sidebarMarkup = renderSidebar(routes, currentRoute, siteConfig);
   let pagerMarkup = renderPager(routes, currentRoute, siteConfig);
+
+  let editMarkup = '';
+  if (siteConfig.editBaseUrl && currentRoute.editPath) {
+    let editHref = `${siteConfig.editBaseUrl}${currentRoute.editPath}`;
+    editMarkup = `<div class="lp-doc-footer">
+      <a class="lp-edit-link" href="${escapeHtml(editHref)}" target="_blank" rel="noopener noreferrer">Edit this page on GitHub</a>
+    </div>`;
+  }
 
   let derivedIndex = buildSearchIndex(routes);
   let searchDialogHtml = renderSearchDialog({
@@ -236,6 +281,7 @@ ${renderHead(siteConfig, currentRoute.title, currentRoute.path)}
         <article class="lp-article">
           ${contentHtml}
         </article>
+        ${editMarkup}
         ${pagerMarkup}
       </div>
 

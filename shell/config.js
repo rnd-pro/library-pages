@@ -183,6 +183,11 @@ export function defineSiteConfig(config) {
       throw new Error('searchPlaceholder must be a non-empty string.');
     }
   }
+  if (config.editBaseUrl !== undefined) {
+    if (typeof config.editBaseUrl !== 'string' || !config.editBaseUrl.trim()) {
+      throw new Error('editBaseUrl must be a non-empty string.');
+    }
+  }
   if (config.stack !== undefined) {
     if (typeof config.stack !== 'object' || config.stack === null || Array.isArray(config.stack)) {
       throw new Error('stack must be an object with "title" and "items".');

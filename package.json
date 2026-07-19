@@ -1,0 +1,57 @@
+{
+  "name": "@rnd-pro/library-pages",
+  "version": "0.1.0-alpha.1",
+  "description": "Reusable JSDA-based documentation and GitHub Pages shell for RND-PRO libraries.",
+  "type": "module",
+  "license": "MIT",
+  "author": "RND-PRO",
+  "homepage": "https://github.com/rnd-pro/library-pages#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rnd-pro/library-pages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rnd-pro/library-pages/issues"
+  },
+  "keywords": [
+    "documentation",
+    "github-pages",
+    "jsda",
+    "static-site"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./shell": "./shell/index.js",
+    "./url": "./url/index.js",
+    "./search": "./search/index.js",
+    "./jsda": "./jsda/index.js",
+    "./testing": "./testing/index.js",
+    "./client": "./client/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "shell/",
+    "url/",
+    "search/",
+    "jsda/",
+    "testing/",
+    "client/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "llms.txt"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "pack:dry-run": "npm pack --dry-run --json"
+  },
+  "devDependencies": {
+    "jsda-kit": "1.6.0",
+    "linkedom": "0.18.13"
+  }
+}

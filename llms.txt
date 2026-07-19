@@ -1,0 +1,38 @@
+Package: @rnd-pro/library-pages
+Version: 0.1.0-alpha.1
+Runtime Dependencies: None (strict zero-dependency boundary)
+Environment requirements: Node.js >= 18 is required for the package core (isomorphic/SSG functionality); Node.js >= 20 is required for native JSDA Kit 1.6 builds.
+
+Architecture details:
+- Isomorphic tier isolation: SSG and config functions (under `@rnd-pro/library-pages`) are DOM-free and Node-safe.
+- Client-side enhancements (under `@rnd-pro/library-pages/client`) target DOM globals and must not be imported in SSG contexts.
+
+Core exports (@rnd-pro/library-pages):
+- `defineSiteConfig(config)`: Validates and freezes trusted build site configs. Defaults: `basePath` = `/`, `language` = `en`, `themeStorageKey` = `lp-theme`. One composed config represents one page family.
+- Optional document head fields: `metadata.icon` (non-empty string; resolved through base-path helpers, escaped, emitted as exactly `<link rel="icon" href="...">`) and `pageStyles` (trusted build-time CSS string; emitted as a dedicated `<style>` tag after the package baseline CSS and before the theme boot/client script). Both are absent by default with unchanged output. `pageStyles` accepts ordinary CSS (child combinators, braces, at-rules) and rejects only a closing `</style` sequence (case-insensitive) at config time and defensively at render time.
+- `defineDocsRoutes(routes, options)`: Normalizes and freezes page routes. Supports `defaultSection` fallback option for routes without an explicit section.
+- `createUrlHelpers({ basePath, baseUrl })`: Generates URL and path mapping helpers relative to basePath.
+- `readPagesEnv(env)`: Reads environment variables (BASE_PATH, GITHUB_REPOSITORY).
+- `renderPage({ siteConfig, pageTitle, contentHtml, currentPath, searchIndex })`: Standard HTML layout SSG renderer.
+- `renderDocsPage({ siteConfig, routes, currentRoute, contentHtml, toc })`: Renders interactive documentation layout.
+- Modular layout segment renderers: `renderHead`, `renderHeader`, `renderFooter` (static fallback copyright `© <brand title>`), `renderStyles`, `renderThemeBoot`.
+  - `renderHeader` renders the desktop `<nav class="lp-nav">` and, when `navigation` is non-empty, one static `<details class="lp-header-nav">` mobile navigation with the same base-path resolution, labels, `active` class, and `aria-current="page"` semantics. It works without JS (never gated behind `.js-active`), is hidden above 900px, and uses only `--lp-*` tokens with no `!important`, animation, blur, or heavy shadow.
+  - `renderThemeBoot` emits a minifier-safe inline bootstrap: adds `js-active` before fallible work, resolves a valid stored theme, then the system dark preference, then light, and applies `data-theme` plus the matching root class. Binding-free `catch` blocks with no declarations inside catch scopes keep the script valid after native JSDA 1.6 HTML minification.
+- Navigation and outline helpers: `extractTOC`, `renderTOC`, `renderSidebar`, `renderPager`.
+- Search components: `buildSearchIndex` and `renderSearchDialog`.
+- `createPagesJsdaConfig(options)`: Generates static config objects compatible with native `jsda-kit` 1.6. Operates with an explicit, immutable-JSDA boundary (does not wrap, patch, or modify `jsda-kit` CLI or internals).
+- Verification tools: `createArtifactChecks(options)` and `assertPagesOutput(options)`.
+
+Client-side progressive enhancement exports (@rnd-pro/library-pages/client):
+- `enhanceLibraryPages(options)`: Boots progressive client behaviors.
+  - Accepts options: `dialog` (selector string/DOM element), `searchIndex` (array), and `basePath` (string).
+  - Client behavior: Adds `.js-active` class to root `<html>` element, attaches window scroll listener for body `data-scrolled` attribute, attaches click listener to `[data-theme-toggle]` to toggle theme classes/attribute on `<html>` and save state in localStorage (using key from `data-theme-key` or `lp-theme`), and hooks up search triggers/dialog modal controls.
+  - Does NOT track active headings.
+  - Returns an idempotent cleanup function that removes scroll/theme/search event listeners and clears the `.js-active` / `data-scrolled` classes/attributes, but does NOT reset theme classes/attributes on the root element or clear the saved theme in localStorage.
+
+Consumer ownership:
+- The package governs only structural layouts, basic accessibility elements, and progressive search/theme triggers.
+- The consumer retains exclusive ownership of all documentation text, diagrams, animations, and demo semantics.
+
+Symbiote bridge:
+- Setting `symbioteTokenBridge: true` in config targets `html[data-lp-symbiote="true"]`, mapping library `--lp-*` styles to `--sn-*` custom properties.

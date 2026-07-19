@@ -772,3 +772,12 @@ test('renderStyles - bridges article code blocks into the semantic syntax palett
   assert.match(css, /\.lp-article code-block \{[^}]*--sn-syntax-keyword: var\(--brand\)/);
   assert.match(css, /\.lp-article code-block \{[^}]*--sn-sys-surface: var\(--surface-code\)/);
 });
+
+test('renderStyles - semantic font tokens stay concrete to avoid the symbiote bridge cycle', () => {
+  let css = renderStyles({});
+  const sans = css.match(/--sans:\s*([^;]+);/);
+  const mono = css.match(/--mono:\s*([^;]+);/);
+  assert.ok(sans && !sans[1].includes('var(--lp-font'), '--sans must not alias --lp-font-sans');
+  assert.ok(mono && !mono[1].includes('var(--lp-font'), '--mono must not alias --lp-font-mono');
+  assert.ok(sans[1].includes('Inter'), '--sans carries the shared Inter stack');
+});

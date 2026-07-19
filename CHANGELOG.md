@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-alpha.6] - 2026-07-19
+
+### Fixed
+
+- The semantic `--sans`/`--mono` tokens carry concrete font stacks instead of aliasing `--lp-font-*`: on consumers with the Symbiote token bridge enabled the alias formed a custom-property cycle (`--lp-font -> --sn-font -> --sans`), invalidating `font-family` and dropping the page to the browser default font.
+
 ## [0.1.0-alpha.5] - 2026-07-19
 
 ### Added

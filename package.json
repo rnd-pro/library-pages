@@ -1,6 +1,6 @@
 {
   "name": "library-pages",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.6",
   "description": "Reusable JSDA-based documentation and GitHub Pages shell for RND-PRO libraries.",
   "type": "module",
   "license": "MIT",
